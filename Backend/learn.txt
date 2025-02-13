@@ -1,0 +1,2 @@
+npm init -y  initialize  the node js 
+npm i express mongoose dotenv jsonwebtoken bcryptjs cookie-parser cloudinary socket.io
