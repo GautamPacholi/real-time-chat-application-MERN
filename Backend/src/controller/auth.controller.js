@@ -37,3 +37,41 @@ export const signup=async (req,res)=>{
      return res.status(500).json({message:"Internal server error"});
    }
 };
+
+export const login= async (req,res)=>{
+    const{email,password}=req.body;
+    if(password.length<6) return res.status(400).json({message:"Password should equal or greater than 6"});
+    try{
+       const user=await User.findOne({email});
+       if(user){
+           if(await bcrypt.compare(password,user.password)){
+               generateToken(check._id,res);
+              return  res.status(200).json({
+                   _id:user._id,
+                   email:user.email,
+                   password:user.password,
+                   profilePic:user.profilePic
+
+               });
+               
+           }
+           else return res.status(400).json({message:"Invalid Credential"});
+       }
+       else return res.status(400).json({message:"Invalid Credential"});
+    }
+    catch(error){
+      console.log("Error in login "+error.message);
+       return res.send(500).json("Server error in loginIn");
+    }
+};
+
+export const logout=(req,res)=>{
+    try{
+      res.cookie('jwt',"",{maxAge:0});
+      res.status(200).json({message:"logout succesfully"});
+    }
+    catch(error){
+       console.log("error in logout"+error.message);
+       res.status(500).json({Message:"Server error in logout"});
+    }
+};
